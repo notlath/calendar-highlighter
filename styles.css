@@ -1,0 +1,227 @@
+/* CSS resets and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    color: #1a1a1a;
+    /* Absolutely no transitions or animations permitted */
+    transition: none !important;
+    animation: none !important;
+}
+
+body {
+    background-color: #F5F0E8;
+    border: 4px solid #1a1a1a;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.layout-container {
+    display: flex;
+    gap: 3rem;
+    max-width: 1200px;
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .layout-container {
+        flex-direction: column;
+    }
+}
+
+/* Brutalist Button Base */
+.brutalist-btn {
+    background-color: #fff;
+    border: 4px solid #1a1a1a;
+    box-shadow: 4px 4px 0px #1a1a1a;
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.brutalist-btn:hover {
+    box-shadow: -4px -4px 0px #1a1a1a;
+    transform: translate(2px, 2px);
+}
+
+/* --------------------------
+   Control Panel Area
+   -------------------------- */
+.control-panel {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex-shrink: 0;
+}
+
+.legend-card {
+    background-color: #fff;
+    border: 4px solid #1a1a1a;
+    box-shadow: 4px 4px 0px #1a1a1a;
+    padding: 1.5rem;
+}
+
+.legend-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    border-bottom: 4px solid #1a1a1a;
+    padding-bottom: 0.5rem;
+}
+
+.legend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.color-swatch {
+    width: 35px;
+    height: 35px;
+    border: 3px solid #1a1a1a;
+    box-shadow: 2px 2px 0px #1a1a1a;
+    flex-shrink: 0;
+}
+
+/* Editable Labels */
+.legend-label {
+    flex-grow: 1;
+    cursor: text;
+    padding: 0.25rem 0.5rem;
+    border: 3px solid transparent;
+    user-select: none;
+}
+
+.legend-label:hover {
+    border: 3px solid #1a1a1a;
+}
+
+.legend-input {
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: 3px solid #1a1a1a;
+    box-shadow: 3px 3px 0px #1a1a1a;
+    padding: 0.25rem 0.5rem;
+    outline: none;
+    background: #fff;
+}
+
+.helper-text {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Export Button */
+.export-btn {
+    display: block;
+    width: 100%;
+    padding: 1.25rem;
+    font-size: 1.5rem;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.export-btn:hover {
+    background-color: #fff;
+    color: #1a1a1a;
+    box-shadow: -4px -4px 0px #1a1a1a;
+    transform: translate(2px, 2px);
+}
+
+/* --------------------------
+   Calendar Grid Area
+   -------------------------- */
+.calendar-wrapper {
+    flex-grow: 1;
+    /* Container padding to ensure box-shadow inside fits correctly when capturing */
+    padding-bottom: 8px; 
+    padding-right: 8px;
+}
+
+.calendar-area {
+    background-color: #fff;
+    border: 4px solid #1a1a1a;
+    box-shadow: 4px 4px 0px #1a1a1a;
+    padding: 2rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 4px solid #1a1a1a;
+    padding-bottom: 1rem;
+}
+
+.calendar-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.nav-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+}
+
+.day-header {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border-bottom: 3px solid #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.day-cell {
+    aspect-ratio: 1;
+    border: 3px solid #1a1a1a;
+    box-shadow: 4px 4px 0px #1a1a1a;
+    background-color: #fff;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.day-cell.empty {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    cursor: default;
+}
+
+.day-cell.valid-day:hover {
+    box-shadow: -4px -4px 0px #1a1a1a;
+    transform: translate(2px, 2px);
+}
+
+.day-number {
+    margin-bottom: auto;
+}

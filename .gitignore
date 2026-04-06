@@ -1,0 +1,30 @@
+# Custom Agent / Tooling Exclusions
+.agents/
+.kilocode/
+.qwen/
+skills-lock.json
+.gemini/
+
+# Node/NPM (In case of future JS tooling)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.editorconfig

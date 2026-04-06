@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Highlighter</title>
+    <!-- Space Grotesk Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <!-- html2canvas via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="layout-container">
+        <!-- Control Panel -->
+        <aside class="control-panel">
+            <div class="legend-card">
+                <h2>LEGEND</h2>
+                <div id="legend-container" class="legend-list">
+                    <!-- Legend items handled by JS -->
+                </div>
+                <p class="helper-text">Double-click labels to rename.</p>
+            </div>
+
+            <button id="export-btn" class="brutalist-btn export-btn">EXPORT PNG</button>
+        </aside>
+
+        <!-- Calendar Area -->
+        <div class="calendar-wrapper">
+            <main id="calendar-capture-area" class="calendar-area">
+                <header class="calendar-header">
+                    <button id="prev-month" class="brutalist-btn nav-btn">&lt;</button>
+                    <h1 id="month-year-display"></h1>
+                    <button id="next-month" class="brutalist-btn nav-btn">&gt;</button>
+                </header>
+
+                <div class="calendar-grid">
+                    <!-- Grid Headers -->
+                    <div class="day-header">SUN</div>
+                    <div class="day-header">MON</div>
+                    <div class="day-header">TUE</div>
+                    <div class="day-header">WED</div>
+                    <div class="day-header">THU</div>
+                    <div class="day-header">FRI</div>
+                    <div class="day-header">SAT</div>
+                </div>
+
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Days initialized dynamically by JS -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="main.js" defer></script>
+</body>
+
+</html>
