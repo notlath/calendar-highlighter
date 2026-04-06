@@ -1,21 +1,19 @@
-// Config values
-// Using direct hue strings to avoid any CSS variable usage
-const RAW_COLORS = ['#2A75D3', '#FF5E4D', '#FFAA00', '#4EAA54'];
-const DEFAULT_LABELS = ['Attended', 'Absent', 'Seminar / Approval for Overtime Schedule', 'Holiday / Suspended'];
-const MONTH_NAMES = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-
 // App State
 let currentDate = new Date(); 
 currentDate.setDate(1); // Set to 1st of current month
 
-// Map: ISO Date string (YYYY-MM-DD) -> Color value string
-const highlightsMap = new Map();
+// Categories array holding state
+const categories = [
+    { id: 0, color: '#2A75D3', label: 'Attended' },
+    { id: 1, color: '#FF5E4D', label: 'Absent' },
+    { id: 2, color: '#FFAA00', label: 'Seminar / Approval for Overtime Schedule' },
+    { id: 3, color: '#4EAA54', label: 'Holiday / Suspended' }
+];
 
-// Map: Color string -> Label name
-const legendLabels = new Map();
-RAW_COLORS.forEach((color, i) => {
-    legendLabels.set(color, DEFAULT_LABELS[i]);
-});
+const MONTH_NAMES = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+
+// Map: ISO Date string (YYYY-MM-DD) -> category object ID (integer)
+const highlightsMap = new Map();
 
 // DOM Elements
 const calendarGrid = document.getElementById('calendar-grid');
@@ -34,22 +32,23 @@ function getISODateString(year, month, day) {
 
 // Handles cycling of day cell highlights
 function handleDayClick(dateStr, cellElement) {
-    const currentColor = highlightsMap.get(dateStr);
-    let nextColor = undefined;
+    const currentId = highlightsMap.get(dateStr);
+    let nextId = undefined;
     
-    if (currentColor === undefined) {
-        nextColor = RAW_COLORS[0];
+    if (currentId === undefined) {
+        nextId = categories[0].id;
     } else {
-        const idx = RAW_COLORS.indexOf(currentColor);
-        if (idx < RAW_COLORS.length - 1) {
-            nextColor = RAW_COLORS[idx + 1];
+        const idx = categories.findIndex(c => c.id === currentId);
+        if (idx < categories.length - 1) {
+            nextId = categories[idx + 1].id;
         }
     }
     
     // No transitions/animations, instant change
-    if (nextColor) {
-        highlightsMap.set(dateStr, nextColor);
-        cellElement.style.backgroundColor = nextColor;
+    if (nextId !== undefined) {
+        highlightsMap.set(dateStr, nextId);
+        const color = categories.find(c => c.id === nextId).color;
+        cellElement.style.backgroundColor = color;
     } else {
         highlightsMap.delete(dateStr);
         cellElement.style.backgroundColor = '#fff';
@@ -91,7 +90,13 @@ function renderCalendar() {
         
         // Reapply existing highlights if they exist in state Map
         if (highlightsMap.has(dateStr)) {
-            cell.style.backgroundColor = highlightsMap.get(dateStr);
+            const catId = highlightsMap.get(dateStr);
+            const category = categories.find(c => c.id === catId);
+            if(category) {
+                cell.style.backgroundColor = category.color;
+            } else {
+                cell.style.backgroundColor = '#fff';
+            }
         } else {
             cell.style.backgroundColor = '#fff';
         }
@@ -109,17 +114,47 @@ function renderCalendar() {
 function renderLegend() {
     legendContainer.innerHTML = '';
     
-    RAW_COLORS.forEach(color => {
+    categories.forEach(category => {
         const itemContainer = document.createElement('div');
         itemContainer.className = 'legend-item';
         
+        // --- Color Swatch Customizer ---
+        const swatchWrapper = document.createElement('div');
+        swatchWrapper.style.position = 'relative';
+        
         const swatch = document.createElement('div');
         swatch.className = 'color-swatch';
-        swatch.style.backgroundColor = color;
+        swatch.style.backgroundColor = category.color;
+        swatch.title = "Click to change color";
+        swatch.style.cursor = "pointer";
         
+        const colorInput = document.createElement('input');
+        colorInput.type = 'color';
+        colorInput.value = category.color;
+        colorInput.style.position = 'absolute';
+        colorInput.style.opacity = '0';
+        colorInput.style.width = '0';
+        colorInput.style.height = '0';
+        colorInput.style.pointerEvents = 'none';
+        
+        swatch.addEventListener('click', () => {
+            colorInput.click();
+        });
+        
+        colorInput.addEventListener('input', (e) => {
+            const newColor = e.target.value;
+            category.color = newColor;
+            swatch.style.backgroundColor = newColor;
+            renderCalendar(); // Instantly update all cells in the grid with this category
+        });
+        
+        swatchWrapper.appendChild(swatch);
+        swatchWrapper.appendChild(colorInput);
+        
+        // --- Editable Label ---
         const labelContainer = document.createElement('div');
         labelContainer.className = 'legend-label';
-        labelContainer.textContent = legendLabels.get(color);
+        labelContainer.textContent = category.label;
         labelContainer.title = "Double-click to edit";
         
         // Double click to edit functionality
@@ -127,11 +162,11 @@ function renderLegend() {
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'legend-input';
-            input.value = legendLabels.get(color);
+            input.value = category.label;
             
             const commitLabelChange = () => {
                 const newLabelText = input.value.trim() || 'Unlabeled';
-                legendLabels.set(color, newLabelText);
+                category.label = newLabelText;
                 renderLegend(); // Re-render to show updated text
             };
             
@@ -149,7 +184,7 @@ function renderLegend() {
             input.select();
         });
         
-        itemContainer.appendChild(swatch);
+        itemContainer.appendChild(swatchWrapper);
         itemContainer.appendChild(labelContainer);
         legendContainer.appendChild(itemContainer);
     });
